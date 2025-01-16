@@ -1,12 +1,16 @@
-import { Tabs } from 'expo-router';
 import React from 'react';
+import { Tabs } from 'expo-router';
 import { Platform } from 'react-native';
-
+import { Image } from 'expo-image';
+// Custom Components
 import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
+// Custom Hooks
 import { useColorScheme } from '@/hooks/useColorScheme';
+// Constants/Config
+import { Colors } from '@/constants/Colors';
+import Images from '@/constants/Images';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -34,10 +38,11 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="community"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Community',
+          // tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          tabBarIcon: ({ size }) => <Image source={Images.chatBubble} style={{ flex: 1, width: size, height: size }} contentFit="cover"/>
         }}
       />
     </Tabs>
