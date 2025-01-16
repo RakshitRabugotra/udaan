@@ -1,15 +1,13 @@
-import { Image, StyleSheet, Platform } from "react-native";
-
-import { HelloWave } from "@/components/HelloWave";
-import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { ThemedText } from "@/components/ThemedText";
+import { StyleSheet } from "react-native";
 import { ThemedView } from "@/components/ThemedView";
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { useSafeAreaInsets} from "react-native-safe-area-context";
 import MapView from "react-native-maps";
+// Custom Components
 import ImageCard from "@/components/ui/ImageCard";
+import ThemedButton from "@/components/ThemedButton";
+import HomeHeader from "@/components/pages/home/HomeHeader";
+// Constants/Config
+import { Colors } from "@/constants/Colors";
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
@@ -24,7 +22,8 @@ export default function HomeScreen() {
     //     />
     //   }>
 
-    <ThemedView style={[styles.baseContainer, styles["gap-y-2"], { marginTop: insets.top }]}>
+    <ThemedView style={[styles.baseContainer, { marginTop: insets.top }]}>
+      <HomeHeader />
       <ThemedView style={styles.mapContainer}>
         <MapView
           initialRegion={{
@@ -35,12 +34,15 @@ export default function HomeScreen() {
           }}
         />
       </ThemedView>
+
+      <ThemedView style={styles.cardContainer}>
+        <ImageCard text="Location" icon="location" />
+        <ImageCard text="Fake Call" icon="phone" />
+        <ImageCard text="Help" />
+      </ThemedView>
+
       <ThemedView>
-        <ThemedView style={styles.cardContainer}>
-          <ImageCard text="Help"/>
-          <ImageCard text="Help"/>
-          <ImageCard text="Help"/>
-        </ThemedView>
+        <ThemedButton>SOS</ThemedButton>
       </ThemedView>
       {/* <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Step 1: Try it</ThemedText>
@@ -86,12 +88,14 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 12,
   },
-  mapContainer: { 
-    flex: 1, 
-    backgroundColor: "white", 
-    overflow: "hidden", 
+  mapContainer: {
+    flex: 1,
+    backgroundColor: "white",
+    overflow: "hidden",
     borderRadius: 16,
-    position: 'relative' 
+    borderColor: Colors.surface[300] + "33",
+    borderWidth: 1,
+    position: "relative",
   },
   stepContainer: {
     gap: 8,
@@ -106,14 +110,11 @@ const styles = StyleSheet.create({
   },
   // Utilities
   flex: {
-    flex: 1
-  },
-  "gap-y-2": {
-    gap: "0.5rem 0px"
+    flex: 1,
   },
   cardContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
+    paddingVertical: 16,
     gap: 8,
-    padding: 18,
-  }
+  },
 });

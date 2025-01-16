@@ -23,4 +23,28 @@ export const Colors = {
     tabIconDefault: '#9BA1A6',
     tabIconSelected: tintColorDark,
   },
+  primary: {
+    100: "#f8ceef",
+    200: "#f5c2eb",
+    300: "#f3b6e7",
+    400: "#f093e3",
+    500: "#ed9ddf",
+    600: "#ea90db"
+  },
+  surface: {
+    100: "#858585",
+    200: "#696969",
+    300: "#4e4e4e",
+    400: "#353535",
+    500: "#1e1e1e",
+    600: "#000000"
+  },
+  tonalSurface: {
+    100: "#9b9399",
+    200: "#847a82",
+    300: "#6d626b",
+    400: "#574b54",
+    500: "#42353f",
+    600: "#2e202b",
+  }
 };
