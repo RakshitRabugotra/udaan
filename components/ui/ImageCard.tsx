@@ -1,5 +1,12 @@
 import { useMemo } from "react";
-import { View, Pressable, ColorSchemeName, StyleSheet, useColorScheme } from "react-native";
+import { useRouter } from "expo-router";
+import {
+  View,
+  ColorSchemeName,
+  StyleSheet,
+  useColorScheme,
+  TouchableOpacity,
+} from "react-native";
 import { Image } from "expo-image";
 // Custom Components
 import { ThemedText } from "../ThemedText";
@@ -20,9 +27,10 @@ export default function ImageCard({
   icon,
   text,
 }: {
-  icon?: "location" | "phone";
+  icon?: "location" | "phone" | "siren";
   text: string;
 }) {
+  const router = useRouter();
   const colorScheme = useColorScheme();
 
   const image = useMemo(
@@ -44,20 +52,21 @@ export default function ImageCard({
   );
 
   return (
-    <Pressable
+    <TouchableOpacity
       style={[
         imageCardStyles.base,
         imageCardStyles.boxWithShadow,
         { backgroundColor: background },
       ]}
+      onPress={() => router.push('/helpline')}
     >
-      <View style={imageCardStyles.iconContainer}>
-        {image}
-      </View>
-      <ThemedText style={[{ color: foreground }]} type="subtitle">
-        {text}
-      </ThemedText>
-    </Pressable>
+      
+        <View style={imageCardStyles.iconContainer}>{image}</View>
+        <ThemedText style={[{ color: foreground }]} type="subtitle">
+          {text}
+        </ThemedText>
+
+    </TouchableOpacity>
   );
 }
 
@@ -78,12 +87,12 @@ export const imageCardStyles = StyleSheet.create({
     elevation: 5,
   },
   iconContainer: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 999,
     padding: 12,
   },
   icon: {
     width: 48,
-    height: 48
+    height: 48,
   },
 });

@@ -40,7 +40,8 @@
             "./assets/icons/48/call.png",
             "./assets/icons/64/location.png",
             "./assets/icons/64/phone.png",
-            "./assets/icons/64/chat-bubble.png"
+            "./assets/icons/64/chat-bubble.png",
+            "./assets/icons/64/siren.png"
           ]
         }
       ]

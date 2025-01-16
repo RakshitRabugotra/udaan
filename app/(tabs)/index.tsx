@@ -38,7 +38,7 @@ export default function HomeScreen() {
       <ThemedView style={styles.cardContainer}>
         <ImageCard text="Location" icon="location" />
         <ImageCard text="Fake Call" icon="phone" />
-        <ImageCard text="Help" />
+        <ImageCard text="Help" icon="siren" />
       </ThemedView>
 
       <ThemedView>
@@ -86,6 +86,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   baseContainer: {
     flex: 1,
+    paddingTop: 0,
     padding: 12,
   },
   mapContainer: {

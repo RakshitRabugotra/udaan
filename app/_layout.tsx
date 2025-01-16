@@ -37,6 +37,8 @@ export default function RootLayout() {
       <SafeAreaProvider>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="helpline" />
+          <Stack.Screen name="settings" />
           <Stack.Screen name="+not-found" />
         </Stack>
         <StatusBar style="auto" />
