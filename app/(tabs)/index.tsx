@@ -1,16 +1,78 @@
-import { StyleSheet } from "react-native";
-import { ThemedView } from "@/components/ThemedView";
-import { useSafeAreaInsets} from "react-native-safe-area-context";
-import MapView from "react-native-maps";
+import { useEffect, useState } from "react";
+// Native API
+import { router } from "expo-router";
+import { StyleSheet, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 // Custom Components
-import ImageCard from "@/components/ui/ImageCard";
-import ThemedButton from "@/components/ThemedButton";
+import { ThemedView } from "@/components/ThemedView";
 import HomeHeader from "@/components/pages/home/HomeHeader";
-// Constants/Config
-import { Colors } from "@/constants/Colors";
+import ImageCard from "@/components/ui/ImageCard";
+import Map from "@/components/ui/Map";
+import ThemedButton from "@/components/ThemedButton";
+// Custom Utilities
+import { fetchLocation, LocationObject, shareLocation } from "@/util/location";
+import { sendSOS, UserData } from "@/util/sos";
+
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
+
+  const [userLocation, setUserLocation] = useState<LocationObject | null>(null);
+
+  const verifyAndShareLocation = async () => {
+    // const location = await fetchLocation({
+    //   onError(error) {
+    //     console.log("Error while fetching the location: ", error);
+    //   },
+    // });
+    // if (!location) {
+    //   console.log("Couldn't fetch location");
+    //   return;
+    // }
+    // Else, the location is fetched, then share the location
+    shareLocation({
+      location: userLocation,
+      onSuccess() {
+        console.log("Location share success");
+      },
+      onError() {
+        console.log("Error while sharing...");
+      },
+    });
+  };
+
+  useEffect(() => {
+    const updateLocation = async () => {
+      const location = await fetchLocation({
+        onSuccess(result) {
+          // Update the user-location
+          setUserLocation((prev) => result as LocationObject);
+        },
+        onError(error) {
+          console.log("Error while fetching the location: ", error);
+        },
+      });
+      if (!location) {
+        console.log("Couldn't fetch location");
+        return;
+      }
+      console.log("Location updated at: ", new Date().toTimeString());
+      // Update the user-location
+      setUserLocation((prev) => location);
+    };
+
+    updateLocation();
+  }, []);
+
+  if (!userLocation) {
+    return (
+      <ThemedView>
+        {/* <ActivityIndicator>
+          <ThemedText type="title">Locating...</ThemedText>
+        </ActivityIndicator> */}
+      </ThemedView>
+    );
+  }
 
   return (
     // <ParallaxScrollView
@@ -24,26 +86,57 @@ export default function HomeScreen() {
 
     <ThemedView style={[styles.baseContainer, { marginTop: insets.top }]}>
       <HomeHeader />
-      <ThemedView style={styles.mapContainer}>
-        <MapView
-          initialRegion={{
-            latitude: 37.78825,
-            longitude: -122.4324,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-        />
+      <ThemedView style={styles.heroContainer}>
+        <Map />
+        <View style={styles.sosContainer}>
+          <ThemedButton
+            style={{
+              backgroundColor: "#dc3545",
+              borderRadius: 999,
+              flex: 0,
+              width: "33%",
+              elevation: 6,
+              aspectRatio: "1/1",
+            }}
+            textStyle={{
+              color: "#fff",
+            }}
+            activeOpacity={0.97}
+            onPress={() =>
+              sendSOS({
+                userData: JSON.stringify({
+                  name: "Rakshit Rabugotra",
+                  email: "rakshit.rabugotra360@gmail.com",
+                  emergency: ["+91-8080"],
+                } as UserData),
+                location: userLocation,
+              })
+            }
+          >
+            {userLocation ? "SOS" : "Locating..."}
+          </ThemedButton>
+        </View>
       </ThemedView>
 
       <ThemedView style={styles.cardContainer}>
-        <ImageCard text="Location" icon="location" />
-        <ImageCard text="Fake Call" icon="phone" />
-        <ImageCard text="Help" />
+        <ImageCard
+          text={userLocation ? "Share location" : "Locating..."}
+          icon="location"
+          isDisabled={!userLocation}
+          onPress={() => verifyAndShareLocation()}
+        />
+        <ImageCard
+          text="Start Journey"
+          icon="route"
+          onPress={() => router.push("/journey")}
+        />
+        <ImageCard
+          text="Help Directory"
+          icon="siren"
+          onPress={() => router.push("/helpline")}
+        />
       </ThemedView>
 
-      <ThemedView>
-        <ThemedButton>SOS</ThemedButton>
-      </ThemedView>
       {/* <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Step 1: Try it</ThemedText>
         <ThemedText>
@@ -86,15 +179,13 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   baseContainer: {
     flex: 1,
+    paddingTop: 0,
     padding: 12,
   },
-  mapContainer: {
+  heroContainer: {
     flex: 1,
     backgroundColor: "white",
-    overflow: "hidden",
-    borderRadius: 16,
-    borderColor: Colors.surface[300] + "33",
-    borderWidth: 1,
+    marginBottom: "20%",
     position: "relative",
   },
   stepContainer: {
@@ -108,13 +199,20 @@ const styles = StyleSheet.create({
     left: 0,
     position: "absolute",
   },
-  // Utilities
-  flex: {
-    flex: 1,
+  sosContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
+    gap: 16,
+    position: "absolute",
+    inset: 0,
+    top: "auto",
+    transform: [{ translateY: "50%" }],
+    paddingVertical: 8,
+    zIndex: 10,
   },
   cardContainer: {
     flexDirection: "row",
-    paddingVertical: 16,
     gap: 8,
   },
 });
