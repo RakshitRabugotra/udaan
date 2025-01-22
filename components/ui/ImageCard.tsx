@@ -1,18 +1,21 @@
 import { useMemo } from "react";
-import { useRouter } from "expo-router";
 import {
   View,
   ColorSchemeName,
   StyleSheet,
   useColorScheme,
   TouchableOpacity,
+  ViewStyle,
+  GestureResponderEvent,
 } from "react-native";
+import { TextStyle } from "react-native";
 import { Image } from "expo-image";
 // Custom Components
 import { ThemedText } from "../ThemedText";
 // Constants/Config
 import { Colors } from "@/constants/Colors";
 import Images from "@/constants/Images";
+import gStyles from "@/constants/Styles";
 
 const getColorScheme = (colorScheme: ColorSchemeName = "light") => {
   const res = { background: "", foreground: "" };
@@ -26,11 +29,20 @@ const getColorScheme = (colorScheme: ColorSchemeName = "light") => {
 export default function ImageCard({
   icon,
   text,
+  style,
+  imageStyle,
+  textStyle,
+  isDisabled =false,
+  onPress
 }: {
-  icon?: "location" | "phone" | "siren";
+  icon?: keyof typeof Images;
   text: string;
+  style?: ViewStyle,
+  imageStyle?: ViewStyle,
+  textStyle?: TextStyle,
+  isDisabled?: boolean,
+  onPress?: ((event: GestureResponderEvent) => void)
 }) {
-  const router = useRouter();
   const colorScheme = useColorScheme();
 
   const image = useMemo(
@@ -55,14 +67,18 @@ export default function ImageCard({
     <TouchableOpacity
       style={[
         imageCardStyles.base,
-        imageCardStyles.boxWithShadow,
-        { backgroundColor: background },
+        gStyles.border2 as ViewStyle,
+        { backgroundColor: background, opacity: isDisabled ? 0.95 : 1 },
+        style
       ]}
-      onPress={() => router.push('/helpline')}
+      disabled={isDisabled}
+      aria-disabled={isDisabled}
+      touchSoundDisabled={isDisabled}
+      onPress={onPress}
     >
       
-        <View style={imageCardStyles.iconContainer}>{image}</View>
-        <ThemedText style={[{ color: foreground }]} type="subtitle">
+        <View style={[imageCardStyles.iconContainer, imageStyle]}>{image}</View>
+        <ThemedText style={[{ color: foreground, textAlign: 'center', fontSize: 20 }, textStyle]} type="defaultSemiBold">
           {text}
         </ThemedText>
 
@@ -78,13 +94,6 @@ export const imageCardStyles = StyleSheet.create({
     aspectRatio: "3/4",
     borderRadius: 16,
     gap: 12,
-  },
-  boxWithShadow: {
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 5,
   },
   iconContainer: {
     backgroundColor: "white",
