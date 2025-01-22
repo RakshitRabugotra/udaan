@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, useColorScheme } from "react-native";
+import { StyleSheet, TextStyle, TouchableOpacity, useColorScheme } from "react-native";
 import { TouchableOpacityProps } from "react-native";
 import { useMemo } from "react";
 // Custom Components
@@ -9,6 +9,7 @@ import { Colors } from "@/constants/Colors";
 
 export default function ThemedButton({
   style,
+  textStyle,
   children,
   startContent,
   endContent,
@@ -16,6 +17,7 @@ export default function ThemedButton({
 }: TouchableOpacityProps & {
   startContent?: React.ReactNode,
   endContent?: React.ReactNode
+  textStyle?: TextStyle
 }) {
   const colorScheme = useColorScheme();
 
@@ -33,7 +35,7 @@ export default function ThemedButton({
       {...props}
     >
       {startContent}
-      <ThemedText style={[{ color: foreground, textAlign:"center" }]} type="subtitle">{children}</ThemedText>
+      <ThemedText style={[{ color: foreground, textAlign:"center" }, textStyle]} type="subtitle">{children}</ThemedText>
       {endContent}
     </TouchableOpacity>
   );
