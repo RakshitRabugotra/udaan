@@ -1,11 +1,21 @@
 import { useMemo } from "react";
-import { View, Pressable, ColorSchemeName, StyleSheet, useColorScheme } from "react-native";
+import {
+  View,
+  ColorSchemeName,
+  StyleSheet,
+  useColorScheme,
+  TouchableOpacity,
+  ViewStyle,
+  GestureResponderEvent,
+} from "react-native";
+import { TextStyle } from "react-native";
 import { Image } from "expo-image";
 // Custom Components
 import { ThemedText } from "../ThemedText";
 // Constants/Config
 import { Colors } from "@/constants/Colors";
 import Images from "@/constants/Images";
+import gStyles from "@/constants/Styles";
 
 const getColorScheme = (colorScheme: ColorSchemeName = "light") => {
   const res = { background: "", foreground: "" };
@@ -19,9 +29,19 @@ const getColorScheme = (colorScheme: ColorSchemeName = "light") => {
 export default function ImageCard({
   icon,
   text,
+  style,
+  imageStyle,
+  textStyle,
+  isDisabled =false,
+  onPress
 }: {
-  icon?: "location" | "phone";
+  icon?: keyof typeof Images;
   text: string;
+  style?: ViewStyle,
+  imageStyle?: ViewStyle,
+  textStyle?: TextStyle,
+  isDisabled?: boolean,
+  onPress?: ((event: GestureResponderEvent) => void)
 }) {
   const colorScheme = useColorScheme();
 
@@ -44,20 +64,25 @@ export default function ImageCard({
   );
 
   return (
-    <Pressable
+    <TouchableOpacity
       style={[
         imageCardStyles.base,
-        imageCardStyles.boxWithShadow,
-        { backgroundColor: background },
+        gStyles.border2 as ViewStyle,
+        { backgroundColor: background, opacity: isDisabled ? 0.95 : 1 },
+        style
       ]}
+      disabled={isDisabled}
+      aria-disabled={isDisabled}
+      touchSoundDisabled={isDisabled}
+      onPress={onPress}
     >
-      <View style={imageCardStyles.iconContainer}>
-        {image}
-      </View>
-      <ThemedText style={[{ color: foreground }]} type="subtitle">
-        {text}
-      </ThemedText>
-    </Pressable>
+      
+        <View style={[imageCardStyles.iconContainer, imageStyle]}>{image}</View>
+        <ThemedText style={[{ color: foreground, textAlign: 'center', fontSize: 20 }, textStyle]} type="defaultSemiBold">
+          {text}
+        </ThemedText>
+
+    </TouchableOpacity>
   );
 }
 
@@ -70,20 +95,13 @@ export const imageCardStyles = StyleSheet.create({
     borderRadius: 16,
     gap: 12,
   },
-  boxWithShadow: {
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 5,
-  },
   iconContainer: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 999,
     padding: 12,
   },
   icon: {
     width: 48,
-    height: 48
+    height: 48,
   },
 });

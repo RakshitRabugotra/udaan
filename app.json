@@ -15,6 +15,11 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao"
+        }
       }
     },
     "web": {
@@ -40,8 +45,15 @@
             "./assets/icons/48/call.png",
             "./assets/icons/64/location.png",
             "./assets/icons/64/phone.png",
-            "./assets/icons/64/chat-bubble.png"
+            "./assets/icons/64/chat-bubble.png",
+            "./assets/icons/64/siren.png"
           ]
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
         }
       ]
     ],

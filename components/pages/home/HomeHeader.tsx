@@ -1,6 +1,7 @@
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import { Pressable, StyleSheet, View } from "react-native";
 
 const personName = "Rakshit";
@@ -27,7 +28,7 @@ export default function HomeHeader() {
           {address}
         </ThemedText>
       </View>
-      <Pressable onPress={() => {}}>
+      <Pressable onPress={() => router.push("/settings")}>
         <Ionicons
           name="settings-outline"
           style={headerStyles.gearIcon}
